@@ -5,7 +5,7 @@
 ## Usage
 
 ```csharp
-// Create db table for the lock entity
+// Create db table for the lock entity.
 public class ObjectLockEntity : IBaseEntity
 {
     public string? Id { get; set; }
@@ -13,21 +13,23 @@ public class ObjectLockEntity : IBaseEntity
     public string? Type { get; set; }
 }
 
-// Create typed lock provider
+// Create typed lock provider.
 public class ClientLockProvider : LockProvider
 {
-    public HubClientLockProvider(IObjectLockStore lockStore)
+    public ClientLockProvider(IObjectLockStore lockStore)
         : base(lockStore, "Client")
     {
     }
 }
 
-var clientLockProvider = new HubClientLockProvider(store);
+var clientLockProvider = new ClientLockProvider(store);
 
-// Use it to acquire lock client objects
-// If object already locked by other lock - wait untill lock will be released.
- await using (var clientLock = await clientLockProvider.GetAndAcquireAsync(client.Id, this.cnsSource.Token))
+// Acquire lock client object.
+// If the object already locked by other lock - wait untill lock will be released.
+await using (var clientLock =
+    await clientLockProvider.GetAndAcquireAsync(client.Id, this.cnsSource.Token))
 {
-    // use client
-}// lock will release as Dispose
+    // Use client exclusively.
+    // All other GetAndAcquireAsync will have to wait untill release.
+}// lock will be released during Dispose
 ```
