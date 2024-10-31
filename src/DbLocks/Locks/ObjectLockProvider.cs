@@ -1,6 +1,6 @@
 ﻿using DbLocks.EntityFramework.Store;
 
-namespace CryptoPro.Hub.Service.Common.Locks
+namespace DbLocks
 {
     /// <summary>
     /// Object LockProvider sample.

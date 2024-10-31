@@ -1,10 +1,9 @@
-﻿namespace CryptoPro.Hub.EntityFramework.Store
+﻿namespace DbLocks.EntityFramework.Store
 {
     using System;
     using System.Linq;
     using System.Threading.Tasks;
     using DbLocks.EntityFramework.Entities;
-    using DbLocks.EntityFramework.Store;
     using Microsoft.EntityFrameworkCore;
     using Npgsql;
 
@@ -75,7 +74,7 @@
                         return false;
                     }
                 }
-                throw ex;
+                throw;
             }
             return true;
         }
@@ -131,7 +130,7 @@
                         return false;
                     }
                 }
-                throw ex;
+                throw;
             }
             return true;
         }

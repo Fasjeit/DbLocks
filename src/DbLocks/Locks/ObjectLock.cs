@@ -1,4 +1,4 @@
-﻿namespace CryptoPro.Hub.Service.Common.Locks
+﻿namespace DbLocks
 {
     using System;
     using System.Threading;

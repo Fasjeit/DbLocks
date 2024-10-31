@@ -1,4 +1,4 @@
-﻿namespace CryptoPro.Hub.Service.Common.Locks
+﻿namespace DbLocks
 {
     using System;
     using System.Threading;
@@ -6,30 +6,30 @@
     using DbLocks.EntityFramework.Store;
 
     /// <summary>
-    /// Поставщик объектов синхронизации
+    /// DD locks provider.
     /// </summary>
     public class LockProvider : IDisposable
     {
         /// <summary>
-        /// Тип объекта блокировки
+        /// Locked object type.
         /// </summary>
         private readonly string lockType;
 
         /// <summary>
-        /// Хранилище сущностей блокировок
+        /// Lock db store.
         /// </summary>
         private readonly IObjectLockStore lockStore;
 
         /// <summary>
-        /// Ресурсы очещены
+        /// Is object disposed.
         /// </summary>
         private bool disposed = false;
 
         /// <summary>
-        /// Инициализирует объект поставщика объектов синхронизации
+        /// Creates lock provider.
         /// </summary>
-        /// <param name="lockStore"></param>
-        /// <param name="lockType"></param>
+        /// <param name="lockStore">Lock db store.</param>
+        /// <param name="lockType">Locked object type.</param>
         public LockProvider(IObjectLockStore lockStore, string lockType)
         {
             this.lockStore = lockStore
@@ -39,20 +39,20 @@
         }
 
         /// <summary>
-        /// Получить объект синхронизации
+        /// Get lock for an object.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">Object id.</param>
+        /// <returns>Object lock.</returns>
         public virtual ObjectLock Get(string id)
         {
             return new ObjectLock(id, this.lockType, this.lockStore);
         }
 
         /// <summary>
-        /// Получить объект синхронизации с контролем над ним
+        /// Get and acquire lock for an object.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">Object id.</param>
+        /// <returns>Acquired object lock.</returns>
         public virtual ObjectLock GetAndAcquire(string id, CancellationToken cancellationToken)
         {
             var objectLock = new ObjectLock(id, this.lockType, this.lockStore);
@@ -61,10 +61,10 @@
         }
 
         /// <summary>
-        /// Получить объект синхронизации с контролем над ним
+        /// Get and acquire lock for an object.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">Object id.</param>
+        /// <returns>Acquired object lock.</returns>
         public virtual async ValueTask<ObjectLock> GetAndAcquireAsync(string id, CancellationToken cancellationToken)
         {
             var objectLock = new ObjectLock(id, this.lockType, this.lockStore);
@@ -73,9 +73,8 @@
         }
 
         /// <summary>
-        /// Осводить ресурсы
+        /// Dispose and release lock.
         /// </summary>
-        /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing && !this.disposed)
